@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
-        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+        "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
     },
     "author": "Brandon Maldonado Alonso",
@@ -21,6 +21,7 @@
         "@typescript-eslint/eslint-plugin": "^2.33.0",
         "@typescript-eslint/parser": "^2.33.0",
         "eslint": "^7.0.0",
+        "eslint-config-prettier": "^6.11.0",
         "prettier": "^2.0.5",
         "ts-node": "^8.10.1",
         "typescript": "^3.9.2"
