@@ -10,7 +10,7 @@ module.exports = {
     rules: {
         'no-warning-comments': 'warn',
         'prefer-const': 'warn',
-        prefixWithI: 'never'
+        prefixWithI: 'off'
     },
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/eslint-recommended', 'plugin:@typescript-eslint/recommended', 'prettier']
 };
