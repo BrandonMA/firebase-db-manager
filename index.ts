@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { Record } from 'immutable';
