@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import { SubCollection, Collection, Database, IDEnabled } from '../src';
-import firebaseConfig from '../firebase';
+import firebaseConfig from './firebase';
 
 interface User extends IDEnabled {
     name: string;
