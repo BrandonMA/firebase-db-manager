@@ -2,8 +2,9 @@ import { Collection } from './Collection';
 import { FirebaseReference } from '../Types/FirebaseReference';
 import { isDocumentReference } from '../Types/DocumentReference';
 import { isCollectionReference } from '../Types/CollectionReference';
+import { IDEnabled } from '../Types';
 
-export class SubCollection<DataType, SubCollections> extends Collection<DataType, SubCollections> {
+export class SubCollection<DataType extends IDEnabled, SubCollections> extends Collection<DataType, SubCollections> {
     previousPath: string | null;
 
     constructor(id: string, subCollections: SubCollections | null) {
@@ -12,7 +13,7 @@ export class SubCollection<DataType, SubCollections> extends Collection<DataType
         this.previousPath = null;
     }
 
-    setReference(previousPath: string): void {
+    setReference(previousPath: string | null): void {
         this.previousPath = previousPath;
         const components = this.getFullPath().split('/');
         let reference: FirebaseReference | null = null;

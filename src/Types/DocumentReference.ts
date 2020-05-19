@@ -1,5 +1,4 @@
 import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 
 export type DocumentReference = firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 

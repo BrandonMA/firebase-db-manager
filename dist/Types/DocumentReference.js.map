@@ -1,1 +1,1 @@
-{"version":3,"file":"DocumentReference.js","sourceRoot":"","sources":["../../src/Types/DocumentReference.ts"],"names":[],"mappings":"AACA,OAAO,oBAAoB,CAAC;AAI5B,MAAM,UAAU,mBAAmB,CAAC,KAAc;IAC9C,IAAM,MAAM,GAAG,KAA0B,CAAC;IAC1C,OAAO,MAAM,CAAC,UAAU,KAAK,SAAS,CAAC;AAC3C,CAAC"}
+{"version":3,"file":"DocumentReference.js","sourceRoot":"","sources":["../../src/Types/DocumentReference.ts"],"names":[],"mappings":"AAIA,MAAM,UAAU,mBAAmB,CAAC,KAAc;IAC9C,IAAM,MAAM,GAAG,KAA0B,CAAC;IAC1C,OAAO,MAAM,CAAC,UAAU,KAAK,SAAS,CAAC;AAC3C,CAAC"}

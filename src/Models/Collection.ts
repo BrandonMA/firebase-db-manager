@@ -1,14 +1,15 @@
-import { IDEnabled, isIDEnabled } from '../Types/IDEnabled';
+import { IDEnabled } from '../Types/IDEnabled';
 import { CollectionHolder } from '../Types/CollectionHolder';
 import { DatabaseReferenceHolder } from '../Types/DatabaseReferenceHolder';
 import { CollectionData } from '../Types/CollectionData';
 import { FirebaseReference } from '../Types/FirebaseReference';
-import { DataHolder } from '../Types/DataHolder';
 import { isCollectionReference } from '../Types/CollectionReference';
 import { v4 as uuidv4 } from 'uuid';
 import { Document } from './Document';
+import shareDatabaseReference from './shareDatabaseReference';
+import produce from 'immer';
 
-export class Collection<DataType, SubCollections>
+export class Collection<DataType extends IDEnabled, SubCollections>
     implements IDEnabled, CollectionHolder<SubCollections>, DatabaseReferenceHolder, CollectionData {
     id: string;
     db: firebase.firestore.Firestore | null;
@@ -25,6 +26,7 @@ export class Collection<DataType, SubCollections>
     setReference(previousPath: string | null): void {
         if (this.db != null && previousPath == null) {
             this.reference = this.db.collection(this.getFullPath());
+            shareDatabaseReference(this.collections, this.db);
         } else {
             throw Error('DB reference does not exist or a path is being provided.');
         }
@@ -34,30 +36,23 @@ export class Collection<DataType, SubCollections>
         return this.id;
     }
 
-    async createDocument(data: DataHolder<DataType>): Promise<Document<DataType, SubCollections>> {
+    async createDocument(data: DataType): Promise<Document<DataType, SubCollections>> {
         if (this.reference != null && isCollectionReference(this.reference)) {
             const id = uuidv4();
-            await this.reference.doc(id).set(data.toJS(), { merge: true });
-            let document;
-            if (isIDEnabled(data) && data.has('id')) {
-                document = ((data as unknown) as DataHolder<IDEnabled>).set('id', id);
-                return new Document((document as unknown) as DataHolder<DataType>, this.getFullPath(), this.collections);
-            } else {
-                throw Error('You must an id property to your data object.');
-            }
+            const newData = produce(data, (draft) => {
+                draft.id = id;
+            });
+            await this.reference.doc(id).set(newData, { merge: true });
+            return new Document(newData, this.getFullPath(), this.collections);
         } else {
             throw Error('No reference set');
         }
     }
 
-    async updateDocument(data: DataHolder<DataType>): Promise<Document<DataType, SubCollections>> {
+    async updateDocument(data: DataType): Promise<Document<DataType, SubCollections>> {
         if (this.reference != null && isCollectionReference(this.reference)) {
-            if (isIDEnabled(data)) {
-                await this.reference.doc(data.id).update(data.toJS());
-                return new Document(data as DataHolder<DataType>, this.getFullPath(), this.collections);
-            } else {
-                throw Error('You must an id property to your data object.');
-            }
+            await this.reference.doc(data.id).update(data);
+            return new Document(data, this.getFullPath(), this.collections);
         } else {
             throw Error('No reference set');
         }
@@ -71,7 +66,6 @@ export class Collection<DataType, SubCollections>
 
     subscribeToDocument(
         id: string,
-        makeRecord: (data: DataType) => DataHolder<DataType>,
         onDataChange: (document: Document<DataType, SubCollections>) => void,
         onError: (error: Error) => void
     ): void {
@@ -80,8 +74,7 @@ export class Collection<DataType, SubCollections>
                 (snapshot) => {
                     if (snapshot.exists) {
                         const data = snapshot.data() as DataType;
-                        const record = makeRecord(data);
-                        const document = new Document(record, this.getFullPath(), this.collections);
+                        const document = new Document(data, this.getFullPath(), this.collections);
                         onDataChange(document);
                     }
                 },

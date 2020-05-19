@@ -1,14 +1,11 @@
-import { DataHolder } from '../Types/DataHolder';
-import { Record } from 'immutable';
-interface DocumentData {
+import { IDEnabled } from '../Types/IDEnabled';
+import { CollectionHolder } from '../Types/CollectionHolder';
+export declare class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
+    collections: SubCollections | null;
+    data: Readonly<DataType>;
     previousPath: string;
-}
-declare const DocumentRecord: Record.Factory<DocumentData>;
-export declare class Document<DataType, SubCollections> extends DocumentRecord {
-    private collections;
-    data: DataHolder<DataType>;
-    constructor(data: DataHolder<DataType>, previousPath: string, subCollections: SubCollections | null);
+    constructor(data: DataType, previousPath: string, subCollections: SubCollections | null);
+    setReferenceToSubCollections(): void;
     id(): string;
-    subCollections(): SubCollections | null;
+    modifyData(newData: Partial<DataType>): DataType;
 }
-export {};

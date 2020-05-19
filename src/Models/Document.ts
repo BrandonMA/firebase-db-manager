@@ -1,41 +1,38 @@
-import { DataHolder } from '../Types/DataHolder';
 import { isCollectionData } from '../Types/CollectionData';
-import { isIDEnabled } from '../Types/IDEnabled';
-import { Record } from 'immutable';
+import { IDEnabled } from '../Types/IDEnabled';
+import { CollectionHolder } from '../Types/CollectionHolder';
+import produce from 'immer';
 
-interface DocumentData {
+export class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
+    collections: SubCollections | null;
+    data: Readonly<DataType>;
     previousPath: string;
-}
 
-const DocumentRecord = Record<DocumentData>({
-    previousPath: ''
-});
-
-export class Document<DataType, SubCollections> extends DocumentRecord {
-    private collections: SubCollections | null;
-    data: DataHolder<DataType>;
-
-    constructor(data: DataHolder<DataType>, previousPath: string, subCollections: SubCollections | null) {
-        super({ previousPath });
+    constructor(data: DataType, previousPath: string, subCollections: SubCollections | null) {
+        this.previousPath = previousPath;
         this.data = data;
-        this.collections = Object.freeze(subCollections);
+        this.collections = subCollections;
+        this.setReferenceToSubCollections();
+    }
 
-        for (const subCollection in subCollections) {
-            if (isCollectionData(subCollection) && isIDEnabled(data)) {
-                subCollection.setReference(this.previousPath);
-            }
+    setReferenceToSubCollections(): void {
+        if (this.collections != null) {
+            const values = Object.values(this.collections);
+            values.forEach((subCollection) => {
+                if (isCollectionData(subCollection)) {
+                    subCollection.setReference(`${this.previousPath}/${this.id()}`);
+                }
+            });
         }
     }
 
     id(): string {
-        if (isIDEnabled(this.data)) {
-            return this.data.id;
-        } else {
-            throw Error('Data holder must have an id');
-        }
+        return this.data.id;
     }
 
-    subCollections(): SubCollections | null {
-        return this.collections;
+    modifyData(newData: Partial<DataType>): DataType {
+        return produce(this.data, (draft) => {
+            Object.assign(draft, newData);
+        });
     }
 }

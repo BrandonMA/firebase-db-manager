@@ -9,7 +9,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
         "format": "prettier --write \"src/**/*.ts\"",
-        "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
+        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+        "example": "ts-node --transpile-only --project examples/tsconfig.json examples/example.ts"
     },
     "author": "Brandon Maldonado Alonso",
     "engines": {
@@ -18,7 +19,7 @@
     "license": "MIT",
     "peerDependencies": {
         "firebase": "^7.14.4",
-        "immutable": "^4.0.0-rc.12",
+        "immer": "^6.0.5",
         "uuid": "^8.0.0"
     },
     "devDependencies": {
@@ -33,11 +34,12 @@
         "eslint-plugin-prettier": "^3.1.1",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
+        "firebase": "^7.14.4",
+        "immer": "^6.0.5",
         "prettier": "^2.0.5",
         "ts-node": "^8.10.1",
         "typescript": "^3.9.2",
-        "firebase": "^7.14.4",
-        "immutable": "^4.0.0-rc.12",
+        "utility-types": "^3.10.0",
         "uuid": "^8.0.0"
     },
     "files": [

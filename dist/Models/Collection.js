@@ -34,10 +34,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { isIDEnabled } from '../Types/IDEnabled';
 import { isCollectionReference } from '../Types/CollectionReference';
 import { v4 as uuidv4 } from 'uuid';
 import { Document } from './Document';
+import shareDatabaseReference from './shareDatabaseReference';
+import produce from 'immer';
 var Collection = /** @class */ (function () {
     function Collection(id, subCollections) {
         this.id = id;
@@ -48,6 +49,7 @@ var Collection = /** @class */ (function () {
     Collection.prototype.setReference = function (previousPath) {
         if (this.db != null && previousPath == null) {
             this.reference = this.db.collection(this.getFullPath());
+            shareDatabaseReference(this.collections, this.db);
         }
         else {
             throw Error('DB reference does not exist or a path is being provided.');
@@ -58,25 +60,20 @@ var Collection = /** @class */ (function () {
     };
     Collection.prototype.createDocument = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, document_1;
+            var id_1, newData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 2];
-                        id = uuidv4();
-                        return [4 /*yield*/, this.reference.doc(id).set(data.toJS(), { merge: true })];
+                        id_1 = uuidv4();
+                        newData = produce(data, function (draft) {
+                            draft.id = id_1;
+                        });
+                        return [4 /*yield*/, this.reference.doc(id_1).set(newData, { merge: true })];
                     case 1:
                         _a.sent();
-                        if (isIDEnabled(data) && data.has('id')) {
-                            document_1 = data.set('id', id);
-                            return [2 /*return*/, new Document(document_1, this.getFullPath(), this.collections)];
-                        }
-                        else {
-                            throw Error('You must an id property to your data object.');
-                        }
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, new Document(newData, this.getFullPath(), this.collections)];
                     case 2: throw Error('No reference set');
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -86,16 +83,12 @@ var Collection = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 4];
-                        if (!isIDEnabled(data)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.reference.doc(data.id).update(data.toJS())];
+                        if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.reference.doc(data.id).update(data)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/, new Document(data, this.getFullPath(), this.collections)];
-                    case 2: throw Error('You must an id property to your data object.');
-                    case 3: return [3 /*break*/, 5];
-                    case 4: throw Error('No reference set');
-                    case 5: return [2 /*return*/];
+                    case 2: throw Error('No reference set');
                 }
             });
         });
@@ -115,15 +108,14 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    Collection.prototype.subscribeToDocument = function (id, makeRecord, onDataChange, onError) {
+    Collection.prototype.subscribeToDocument = function (id, onDataChange, onError) {
         var _this = this;
         if (this.reference != null && isCollectionReference(this.reference)) {
             this.reference.doc(id).onSnapshot(function (snapshot) {
                 if (snapshot.exists) {
                     var data = snapshot.data();
-                    var record = makeRecord(data);
-                    var document_2 = new Document(record, _this.getFullPath(), _this.collections);
-                    onDataChange(document_2);
+                    var document_1 = new Document(data, _this.getFullPath(), _this.collections);
+                    onDataChange(document_1);
                 }
             }, function (error) {
                 onError(error);
