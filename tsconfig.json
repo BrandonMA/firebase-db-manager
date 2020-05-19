@@ -1,18 +1,20 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
-        "allowJs": false,
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": false,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "CommonJS",
-        "removeComments": true,
-        "strictNullChecks": true,
-        "outDir": "./dist",
+        "outDir": "dist",
+        "module": "esnext",
+        "lib": ["dom", "esnext"],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noImplicitAny": true,
-        "declaration": true
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowSyntheticDefaultImports": true
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }

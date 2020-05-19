@@ -4,6 +4,7 @@
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "source": "src/index.tsx",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
@@ -11,20 +12,35 @@
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
     },
     "author": "Brandon Maldonado Alonso",
-    "license": "Apache-2.0",
-    "dependencies": {
+    "engines": {
+        "node": ">=13"
+    },
+    "license": "MIT",
+    "peerDependencies": {
         "firebase": "^7.14.4",
         "immutable": "^4.0.0-rc.12",
         "uuid": "^8.0.0"
     },
     "devDependencies": {
         "@types/uuid": "^7.0.3",
-        "@typescript-eslint/eslint-plugin": "^2.33.0",
-        "@typescript-eslint/parser": "^2.33.0",
-        "eslint": "^7.0.0",
+        "@typescript-eslint/eslint-plugin": "^2.26.0",
+        "@typescript-eslint/parser": "^2.26.0",
+        "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.11.0",
+        "eslint-config-standard": "^14.1.0",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.0.0",
+        "eslint-plugin-prettier": "^3.1.1",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.1",
         "prettier": "^2.0.5",
         "ts-node": "^8.10.1",
-        "typescript": "^3.9.2"
-    }
+        "firebase": "^7.14.4",
+        "typescript": "^3.9.2",
+        "immutable": "^4.0.0-rc.12",
+        "uuid": "^8.0.0"
+    },
+    "files": [
+        "dist"
+    ]
 }
