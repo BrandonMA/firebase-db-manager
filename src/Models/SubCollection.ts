@@ -7,7 +7,7 @@ import { IDEnabled } from '../Types';
 export class SubCollection<DataType extends IDEnabled, SubCollections> extends Collection<DataType, SubCollections> {
     previousPath: string | null;
 
-    constructor(id: string, subCollections: SubCollections | null) {
+    constructor(id: string, subCollections: SubCollections) {
         super(id, subCollections);
         this.reference = null;
         this.previousPath = null;

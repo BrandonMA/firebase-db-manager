@@ -14,9 +14,9 @@ export class Collection<DataType extends IDEnabled, SubCollections>
     id: string;
     db: firebase.firestore.Firestore | null;
     reference: FirebaseReference | null;
-    collections: SubCollections | null;
+    collections: SubCollections;
 
-    constructor(id: string, subCollections: SubCollections | null) {
+    constructor(id: string, subCollections: SubCollections) {
         this.id = id;
         this.db = null;
         this.reference = null;

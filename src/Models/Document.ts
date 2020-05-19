@@ -4,11 +4,11 @@ import { CollectionHolder } from '../Types/CollectionHolder';
 import produce from 'immer';
 
 export class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
-    collections: SubCollections | null;
+    collections: SubCollections;
     data: Readonly<DataType>;
     previousPath: string;
 
-    constructor(data: DataType, previousPath: string, subCollections: SubCollections | null) {
+    constructor(data: DataType, previousPath: string, subCollections: SubCollections) {
         this.previousPath = previousPath;
         this.data = data;
         this.collections = subCollections;

@@ -30,11 +30,11 @@ async function tryExample(): Promise<void> {
     });
     console.log(`The user ${brandon.data.name} has been created, his email is ${brandon.data.email}`);
 
-    const dog = await brandon.collections?.pets.createDocument({
+    const dog = await brandon.collections.pets.createDocument({
         id: '1',
         name: 'Dog'
     });
-    console.log(`${brandon.data.name} created a pet called ${dog?.data.name}`);
+    console.log(`${brandon.data.name} created a pet called ${dog.data.name}`);
 
     const updatedDataForBrandon = brandon.modifyData({ email: 'maldonado.brandon177@gmail.com ' });
     brandon = await database.collections.users.updateDocument(updatedDataForBrandon);

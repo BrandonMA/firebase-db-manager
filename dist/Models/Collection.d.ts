@@ -8,8 +8,8 @@ export declare class Collection<DataType extends IDEnabled, SubCollections> impl
     id: string;
     db: firebase.firestore.Firestore | null;
     reference: FirebaseReference | null;
-    collections: SubCollections | null;
-    constructor(id: string, subCollections: SubCollections | null);
+    collections: SubCollections;
+    constructor(id: string, subCollections: SubCollections);
     setReference(previousPath: string | null): void;
     getFullPath(): string;
     createDocument(data: DataType): Promise<Document<DataType, SubCollections>>;
