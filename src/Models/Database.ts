@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { CollectionHolder } from '../Types/CollectionHolder';
-import { DatabaseReferenceHolder } from '../Types/DatabaseReferenceHolder';
+import { CollectionHolder } from './ReservedTypes/CollectionHolder';
+import { DatabaseReferenceHolder } from './ReservedTypes/DatabaseReferenceHolder';
 import shareDatabaseReference from './shareDatabaseReference';
 
 export class Database<Collections> implements CollectionHolder<Collections>, DatabaseReferenceHolder {

@@ -1,15 +1,17 @@
-import { isCollectionData } from '../Types/CollectionData';
+import { isCollectionData } from './ReservedTypes/CollectionData';
 import { IDEnabled } from '../Types/IDEnabled';
-import { CollectionHolder } from '../Types/CollectionHolder';
-import produce from 'immer';
+import { CollectionHolder } from './ReservedTypes/CollectionHolder';
+import produce, { immerable } from 'immer';
+import { DocumentReference } from '../Types';
 
 export class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
     collections: SubCollections;
     data: Readonly<DataType>;
-    previousPath: string;
+    reference: DocumentReference;
+    [immerable] = true;
 
-    constructor(data: DataType, previousPath: string, subCollections: SubCollections) {
-        this.previousPath = previousPath;
+    constructor(data: DataType, reference: DocumentReference, subCollections: SubCollections) {
+        this.reference = reference;
         this.data = data;
         this.collections = subCollections;
         this.setReferenceToSubCollections();
@@ -20,7 +22,7 @@ export class Document<DataType extends IDEnabled, SubCollections> implements Col
             const values = Object.values(this.collections);
             values.forEach((subCollection) => {
                 if (isCollectionData(subCollection)) {
-                    subCollection.setReference(`${this.previousPath}/${this.id()}`);
+                    subCollection.setReference(this.reference.collection(subCollection.id));
                 }
             });
         }
