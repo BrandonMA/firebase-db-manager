@@ -1,6 +1,6 @@
 {
     "name": "firebase-db-manager",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -20,7 +20,9 @@
     "repository": "BrandonMA/firebase-db-manager",
     "peerDependencies": {
         "firebase": "^7.14.4",
-        "immer": "^6.0.5",
+        "immer": "^6.0.5"
+    },
+    "dependencies": {
         "uuid": "^8.0.0"
     },
     "devDependencies": {
@@ -39,8 +41,7 @@
         "immer": "^6.0.5",
         "prettier": "^2.0.5",
         "ts-node": "^8.10.1",
-        "typescript": "^3.9.2",
-        "uuid": "^8.0.0"
+        "typescript": "^3.9.2"
     },
     "files": [
         "dist"
