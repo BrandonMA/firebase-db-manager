@@ -17,6 +17,7 @@
         "node": ">=13"
     },
     "license": "MIT",
+    "repository": "BrandonMA/firebase-db-manager",
     "peerDependencies": {
         "firebase": "^7.14.4",
         "immer": "^6.0.5",
