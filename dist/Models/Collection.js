@@ -45,82 +45,216 @@ var Collection = /** @class */ (function () {
         this.db = null;
         this.reference = null;
         this.collections = subCollections;
+        this.nextVisibleIndex = 0;
     }
-    Collection.prototype.setReference = function (previousPath) {
-        if (this.db != null && previousPath == null) {
-            this.reference = this.db.collection(this.getFullPath());
+    Collection.prototype.setReference = function (reference) {
+        this.reference = reference;
+        if (this.db != null && this.collections != null) {
             shareDatabaseReference(this.collections, this.db);
         }
-        else {
-            throw Error('DB reference does not exist or a path is being provided.');
-        }
     };
-    Collection.prototype.getFullPath = function () {
-        return this.id;
-    };
+    // Document creation
     Collection.prototype.createDocument = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var id_1, newData;
+            var reference, id, newData, documentReference;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 2];
-                        id_1 = uuidv4();
+                        reference = this.getCollectionReference();
+                        id = uuidv4();
                         newData = produce(data, function (draft) {
-                            draft.id = id_1;
+                            draft.id = id;
                         });
-                        return [4 /*yield*/, this.reference.doc(id_1).set(newData, { merge: true })];
+                        documentReference = reference.doc(id);
+                        return [4 /*yield*/, documentReference.set(newData, { merge: true })];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/, new Document(newData, this.getFullPath(), this.collections)];
-                    case 2: throw Error('No reference set');
+                        return [2 /*return*/, new Document(newData, documentReference, this.collections)];
                 }
             });
         });
     };
+    // Getting
+    Collection.prototype.getDocument = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var reference, documentReference, response, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        reference = this.getCollectionReference();
+                        documentReference = reference.doc(id);
+                        return [4 /*yield*/, documentReference.get()];
+                    case 1:
+                        response = _a.sent();
+                        if (response.exists) {
+                            data = response.data();
+                            return [2 /*return*/, new Document(data, documentReference, this.collections)];
+                        }
+                        else {
+                            throw Error('Document does not exist, check your id');
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Collection.prototype.get = function (sortingPredicate, filterPredicate, paginationPredicate, editQuery) {
+        return __awaiter(this, void 0, void 0, function () {
+            var reference, query, snapshot;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        reference = this.getCollectionReference();
+                        query = this.getQuery(reference, sortingPredicate, filterPredicate, paginationPredicate, editQuery);
+                        return [4 /*yield*/, query.get()];
+                    case 1:
+                        snapshot = _a.sent();
+                        if (!snapshot.empty) {
+                            this.nextVisibleIndex += snapshot.size + 1; // Page size would be the index for the last document retreived, so add one.
+                            return [2 /*return*/, snapshot.docs.map(function (firebaseDocument) {
+                                    var data = firebaseDocument.data();
+                                    return new Document(data, firebaseDocument.ref, _this.collections);
+                                })];
+                        }
+                        else {
+                            return [2 /*return*/, []];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // Updating
     Collection.prototype.updateDocument = function (data) {
         return __awaiter(this, void 0, void 0, function () {
+            var reference, documentReference;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.reference.doc(data.id).update(data)];
+                        reference = this.getCollectionReference();
+                        documentReference = reference.doc(data.id);
+                        return [4 /*yield*/, documentReference.update(data)];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/, new Document(data, this.getFullPath(), this.collections)];
-                    case 2: throw Error('No reference set');
+                        return [2 /*return*/, new Document(data, documentReference, this.collections)];
                 }
             });
         });
     };
+    // Deleting
     Collection.prototype.deleteDocument = function (id) {
         return __awaiter(this, void 0, void 0, function () {
+            var reference;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.reference != null && isCollectionReference(this.reference))) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.reference.doc(id)["delete"]()];
+                        reference = this.getCollectionReference();
+                        return [4 /*yield*/, reference.doc(id)["delete"]()];
                     case 1:
                         _a.sent();
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
     };
+    // Subscribing to changes
     Collection.prototype.subscribeToDocument = function (id, onDataChange, onError) {
         var _this = this;
+        var reference = this.getCollectionReference();
+        var subscription = reference.doc(id).onSnapshot(function (snapshot) {
+            if (snapshot.exists) {
+                var data = snapshot.data();
+                var document_1 = new Document(data, snapshot.ref, _this.collections);
+                onDataChange(document_1);
+            }
+        }, function (error) {
+            onError(error);
+        });
+        this.subscriptions.push(subscription);
+        return subscription;
+    };
+    Collection.prototype.subscribe = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
+        var _this = this;
+        var reference = this.getCollectionReference();
+        var query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
+        var subscription = query.onSnapshot(function (snapshot) {
+            if (!snapshot.empty) {
+                var documents = snapshot.docs.map(function (firebaseDocument) {
+                    var data = firebaseDocument.data();
+                    return new Document(data, firebaseDocument.ref, _this.collections);
+                });
+                onDataChange(documents);
+            }
+        }, function (error) {
+            onError(error);
+        });
+        this.subscriptions.push(subscription);
+        return subscription;
+    };
+    Collection.prototype.subscribeWithDiffing = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
+        var _this = this;
+        var reference = this.getCollectionReference();
+        var query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
+        var subscription = query.onSnapshot(function (snapshot) {
+            if (!snapshot.empty) {
+                var map_1 = new Map();
+                snapshot.docChanges().forEach(function (change) {
+                    var data = change.doc.data();
+                    switch (change.type) {
+                        case 'added':
+                        case 'modified':
+                            map_1.set(data.id, new Document(data, change.doc.ref, _this.collections));
+                            break;
+                        case 'removed':
+                            map_1["delete"](data.id);
+                            break;
+                    }
+                });
+                onDataChange(map_1);
+            }
+        }, function (error) {
+            onError(error);
+        });
+        this.subscriptions.push(subscription);
+        return subscription;
+    };
+    // Utility Methods
+    Collection.prototype.removeAllSubscriptions = function () {
+        this.subscriptions.forEach(function (subscription) { return subscription(); });
+    };
+    Collection.prototype.resetPagination = function () {
+        this.nextVisibleIndex = 0;
+    };
+    Collection.prototype.getCollectionReference = function () {
         if (this.reference != null && isCollectionReference(this.reference)) {
-            this.reference.doc(id).onSnapshot(function (snapshot) {
-                if (snapshot.exists) {
-                    var data = snapshot.data();
-                    var document_1 = new Document(data, _this.getFullPath(), _this.collections);
-                    onDataChange(document_1);
-                }
-            }, function (error) {
-                onError(error);
-            });
+            return this.reference;
         }
+        else {
+            throw Error('No reference set or is a document reference');
+        }
+    };
+    Collection.prototype.getQuery = function (reference, sortingPredicate, filterPredicate, paginationPredicate, editQuery) {
+        var newReference = reference;
+        if (sortingPredicate != null) {
+            newReference = newReference.orderBy(sortingPredicate.property, sortingPredicate.direction);
+        }
+        if (filterPredicate != null) {
+            newReference = newReference.where(filterPredicate.property, filterPredicate.direction, filterPredicate.value);
+        }
+        if (paginationPredicate != null) {
+            if (paginationPredicate.page != null) {
+                var lastIndex = paginationPredicate.pageSize * paginationPredicate.page + (paginationPredicate.page > 0 ? 1 : 0);
+                newReference = newReference.startAt(lastIndex).limit(paginationPredicate.pageSize);
+            }
+            else {
+                newReference = newReference.startAt(this.nextVisibleIndex).limit(paginationPredicate.pageSize);
+            }
+        }
+        if (editQuery != null) {
+            newReference = editQuery(newReference);
+        }
+        return newReference;
     };
     return Collection;
 }());

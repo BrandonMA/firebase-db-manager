@@ -1,8 +1,10 @@
-import { isCollectionData } from '../Types/CollectionData';
-import produce from 'immer';
+var _a;
+import { isCollectionData } from './ReservedTypes/CollectionData';
+import produce, { immerable } from 'immer';
 var Document = /** @class */ (function () {
-    function Document(data, previousPath, subCollections) {
-        this.previousPath = previousPath;
+    function Document(data, reference, subCollections) {
+        this[_a] = true;
+        this.reference = reference;
         this.data = data;
         this.collections = subCollections;
         this.setReferenceToSubCollections();
@@ -13,7 +15,7 @@ var Document = /** @class */ (function () {
             var values = Object.values(this.collections);
             values.forEach(function (subCollection) {
                 if (isCollectionData(subCollection)) {
-                    subCollection.setReference(_this.previousPath + "/" + _this.id());
+                    subCollection.setReference(_this.reference.collection(subCollection.id));
                 }
             });
         }
@@ -29,4 +31,5 @@ var Document = /** @class */ (function () {
     return Document;
 }());
 export { Document };
+_a = immerable;
 //# sourceMappingURL=Document.js.map

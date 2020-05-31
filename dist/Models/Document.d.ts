@@ -1,10 +1,13 @@
 import { IDEnabled } from '../Types/IDEnabled';
-import { CollectionHolder } from '../Types/CollectionHolder';
+import { CollectionHolder } from './ReservedTypes/CollectionHolder';
+import { immerable } from 'immer';
+import { DocumentReference } from '../Types';
 export declare class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
     collections: SubCollections;
     data: Readonly<DataType>;
-    previousPath: string;
-    constructor(data: DataType, previousPath: string, subCollections: SubCollections);
+    reference: DocumentReference;
+    [immerable]: boolean;
+    constructor(data: DataType, reference: DocumentReference, subCollections: SubCollections);
     setReferenceToSubCollections(): void;
     id(): string;
     modifyData(newData: Partial<DataType>): DataType;
