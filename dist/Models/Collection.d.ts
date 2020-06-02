@@ -20,7 +20,7 @@ export declare class Collection<DataType extends IDEnabled, SubCollections> impl
     get(sortingPredicate?: SortingPredicate, filterPredicate?: FilterPredicate, paginationPredicate?: PaginationPredicate, editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query): Promise<Array<Document<DataType, SubCollections>>>;
     updateDocument(data: DataType): Promise<Document<DataType, SubCollections>>;
     deleteDocument(id: string): Promise<void>;
-    subscribeToDocument(id: string, onDataChange: (document: Document<DataType, SubCollections>) => void, onError: (error: Error) => void): () => void;
+    subscribeToDocument(id: string, onDataChange: (document: Document<DataType, SubCollections>) => void, onError: (error: Error) => void, onDataDoesNotExist: () => void): () => void;
     subscribe(onDataChange: (documents: Array<Document<DataType, SubCollections>>) => void, onError: (error: Error) => void, sortingPredicate?: SortingPredicate, filterPredicate?: FilterPredicate, editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query): () => void;
     subscribeWithDiffing(onDataChange: (document: Map<string, Document<DataType, SubCollections>>) => void, onError: (error: Error) => void, sortingPredicate?: SortingPredicate, filterPredicate?: FilterPredicate, editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query): () => void;
     removeAllSubscriptions(): void;

@@ -160,7 +160,7 @@ var Collection = /** @class */ (function () {
         });
     };
     // Subscribing to changes
-    Collection.prototype.subscribeToDocument = function (id, onDataChange, onError) {
+    Collection.prototype.subscribeToDocument = function (id, onDataChange, onError, onDataDoesNotExist) {
         var _this = this;
         var reference = this.getCollectionReference();
         var subscription = reference.doc(id).onSnapshot(function (snapshot) {
@@ -168,6 +168,9 @@ var Collection = /** @class */ (function () {
                 var data = snapshot.data();
                 var document_1 = new Document(data, snapshot.ref, _this.collections);
                 onDataChange(document_1);
+            }
+            else {
+                onDataDoesNotExist();
             }
         }, function (error) {
             onError(error);

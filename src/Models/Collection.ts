@@ -102,7 +102,8 @@ export class Collection<DataType extends IDEnabled, SubCollections>
     subscribeToDocument(
         id: string,
         onDataChange: (document: Document<DataType, SubCollections>) => void,
-        onError: (error: Error) => void
+        onError: (error: Error) => void,
+        onDataDoesNotExist: () => void
     ): () => void {
         const reference = this.getCollectionReference();
         const subscription = reference.doc(id).onSnapshot(
@@ -111,6 +112,8 @@ export class Collection<DataType extends IDEnabled, SubCollections>
                     const data = snapshot.data() as DataType;
                     const document = new Document(data, snapshot.ref, this.collections);
                     onDataChange(document);
+                } else {
+                    onDataDoesNotExist();
                 }
             },
             (error) => {
