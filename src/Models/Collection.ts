@@ -16,7 +16,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
     collections: SubCollections;
     db: firebase.firestore.Firestore | null;
     reference: CollectionReference | null;
-    private subscriptions: Array<() => void>;
+    private subscriptions: Array<() => void> = [];
     private nextVisibleIndex: number;
 
     constructor(id: string, subCollections: SubCollections) {

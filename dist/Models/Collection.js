@@ -41,6 +41,7 @@ import shareDatabaseReference from './shareDatabaseReference';
 import produce from 'immer';
 var Collection = /** @class */ (function () {
     function Collection(id, subCollections) {
+        this.subscriptions = [];
         this.id = id;
         this.db = null;
         this.reference = null;
