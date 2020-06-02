@@ -61,7 +61,7 @@ var Collection = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         reference = this.getCollectionReference();
-                        id = uuidv4();
+                        id = data.id ? data.id : uuidv4();
                         newData = produce(data, function (draft) {
                             draft.id = id;
                         });

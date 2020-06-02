@@ -38,7 +38,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
 
     async createDocument(data: DataType): Promise<Document<DataType, SubCollections>> {
         const reference = this.getCollectionReference();
-        const id = uuidv4();
+        const id = data.id ? data.id : uuidv4();
         const newData = produce(data, (draft) => {
             draft.id = id;
         });
