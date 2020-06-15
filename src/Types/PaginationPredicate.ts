@@ -1,4 +1,4 @@
-interface PaginationPredicate {
+export interface PaginationPredicate {
     pageSize: number;
     page?: number;
 }

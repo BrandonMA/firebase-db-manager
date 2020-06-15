@@ -9,6 +9,7 @@ import shareDatabaseReference from './shareDatabaseReference';
 import produce from 'immer';
 import { SortingPredicate } from '../Types/SortingPredicate';
 import { FilterPredicate } from '../Types/FilterPredicate';
+import { PaginationPredicate } from '../Types/PaginationPredicate';
 
 export class Collection<DataType extends IDEnabled, SubCollections>
     implements IDEnabled, CollectionHolder<SubCollections>, DatabaseReferenceHolder, CollectionData {

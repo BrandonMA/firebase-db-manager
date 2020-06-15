@@ -6,6 +6,7 @@ import { CollectionReference } from '../Types/CollectionReference';
 import { Document } from './Document';
 import { SortingPredicate } from '../Types/SortingPredicate';
 import { FilterPredicate } from '../Types/FilterPredicate';
+import { PaginationPredicate } from '../Types/PaginationPredicate';
 export declare class Collection<DataType extends IDEnabled, SubCollections> implements IDEnabled, CollectionHolder<SubCollections>, DatabaseReferenceHolder, CollectionData {
     id: string;
     collections: SubCollections;
