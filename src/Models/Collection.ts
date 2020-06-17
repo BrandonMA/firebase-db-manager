@@ -152,6 +152,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
         return subscription;
     }
 
+    // Implementation is not final, we must pass an original reference, passing a new array everytime is kind of useless.
     subscribeWithDiffing(
         onDataChange: (document: Map<string, Document<DataType, SubCollections>>) => void,
         onError: (error: Error) => void,
