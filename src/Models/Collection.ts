@@ -142,6 +142,8 @@ export class Collection<DataType extends IDEnabled, SubCollections>
                         return new Document(data, firebaseDocument.ref, this.collections);
                     });
                     onDataChange(documents);
+                } else {
+                    onDataChange([]);
                 }
             },
             (error) => {

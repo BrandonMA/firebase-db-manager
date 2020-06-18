@@ -190,12 +190,16 @@ var Collection = /** @class */ (function () {
                 });
                 onDataChange(documents);
             }
+            else {
+                onDataChange([]);
+            }
         }, function (error) {
             onError(error);
         });
         this.subscriptions.push(subscription);
         return subscription;
     };
+    // Implementation is not final, we must pass an original reference, passing a new array everytime is kind of useless.
     Collection.prototype.subscribeWithDiffing = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
         var _this = this;
         var reference = this.getCollectionReference();
