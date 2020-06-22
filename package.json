@@ -1,6 +1,6 @@
 {
     "name": "firebase-db-manager",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
     "repository": "BrandonMA/firebase-db-manager",
     "peerDependencies": {
         "firebase": "^7.15.0",
-        "immer": "^6.0.5"
+        "immer": "^7.0.1"
     },
     "dependencies": {
         "base-64": "^0.1.0",
@@ -40,7 +40,7 @@
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
         "firebase": "^7.15.0",
-        "immer": "^6.0.5",
+        "immer": "^7.0.1",
         "prettier": "^2.0.5",
         "ts-node": "^8.10.1",
         "typescript": "^3.9.2"
