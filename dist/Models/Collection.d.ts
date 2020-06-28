@@ -16,7 +16,7 @@ export declare class Collection<DataType extends IDEnabled, SubCollections> impl
     private nextVisibleIndex;
     constructor(id: string, subCollections: SubCollections);
     setReference(reference: CollectionReference): void;
-    createDocument(data: DataType): Promise<Document<DataType, SubCollections>>;
+    createDocument(data: DataType, skipAwait?: boolean): Promise<Document<DataType, SubCollections>>;
     getDocument(id: string): Promise<Document<DataType, SubCollections>>;
     get(sortingPredicate?: SortingPredicate, filterPredicate?: FilterPredicate, paginationPredicate?: PaginationPredicate, editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query): Promise<Array<Document<DataType, SubCollections>>>;
     updateDocument(data: DataType): Promise<Document<DataType, SubCollections>>;

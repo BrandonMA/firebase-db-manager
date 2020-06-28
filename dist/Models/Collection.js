@@ -55,7 +55,7 @@ var Collection = /** @class */ (function () {
         }
     };
     // Document creation
-    Collection.prototype.createDocument = function (data) {
+    Collection.prototype.createDocument = function (data, skipAwait) {
         return __awaiter(this, void 0, void 0, function () {
             var reference, id, newData, documentReference;
             return __generator(this, function (_a) {
@@ -67,10 +67,14 @@ var Collection = /** @class */ (function () {
                             draft.id = id;
                         });
                         documentReference = reference.doc(id);
-                        return [4 /*yield*/, documentReference.set(newData, { merge: true })];
-                    case 1:
+                        if (!skipAwait) return [3 /*break*/, 1];
+                        documentReference.set(newData, { merge: true });
+                        return [3 /*break*/, 3];
+                    case 1: return [4 /*yield*/, documentReference.set(newData, { merge: true })];
+                    case 2:
                         _a.sent();
-                        return [2 /*return*/, new Document(newData, documentReference, this.collections)];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/, new Document(newData, documentReference, this.collections)];
                 }
             });
         });
