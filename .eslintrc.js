@@ -20,5 +20,8 @@ module.exports = {
         ecmaFeatures: {
             legacyDecorators: true
         }
+    },
+    rules: {
+        'no-prototype-builtins': 'off'
     }
 };
