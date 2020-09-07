@@ -1,15 +1,15 @@
-import { IDEnabled } from '../Types/IDEnabled';
+import { IDEnabled } from '../types/IDEnabled';
 import { CollectionHolder } from './reservedTypes/CollectionHolder';
 import { DatabaseReferenceHolder } from './reservedTypes/DatabaseReferenceHolder';
 import { CollectionData } from './reservedTypes/CollectionData';
-import { isCollectionReference, CollectionReference } from '../Types/CollectionReference';
+import { isCollectionReference, CollectionReference } from '../types/CollectionReference';
 import { v4 as uuidv4 } from 'uuid';
 import { Document } from './Document';
 import shareDatabaseReference from './shareDatabaseReference';
 import produce from 'immer';
-import { SortingPredicate } from '../Types/SortingPredicate';
-import { FilterPredicate } from '../Types/FilterPredicate';
-import { PaginationPredicate } from '../Types/PaginationPredicate';
+import { SortingPredicate } from '../types/SortingPredicate';
+import { FilterPredicate } from '../types/FilterPredicate';
+import { PaginationPredicate } from '../types/PaginationPredicate';
 
 export class Collection<DataType extends IDEnabled, SubCollections>
     implements IDEnabled, CollectionHolder<SubCollections>, DatabaseReferenceHolder, CollectionData {

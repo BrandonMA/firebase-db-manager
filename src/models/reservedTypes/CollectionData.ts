@@ -1,4 +1,4 @@
-import { CollectionReference, IDEnabled } from '../../Types';
+import { CollectionReference, IDEnabled } from '../../types';
 
 export interface CollectionData extends IDEnabled {
     reference: CollectionReference | null;

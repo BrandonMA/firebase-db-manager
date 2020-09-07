@@ -1,8 +1,8 @@
 import { isCollectionData } from './reservedTypes/CollectionData';
-import { IDEnabled } from '../Types/IDEnabled';
+import { IDEnabled } from '../types/IDEnabled';
 import { CollectionHolder } from './reservedTypes/CollectionHolder';
 import produce, { immerable } from 'immer';
-import { DocumentReference } from '../Types';
+import { DocumentReference } from '../types';
 
 export class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
     collections: SubCollections;
