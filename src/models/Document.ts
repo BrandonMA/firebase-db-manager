@@ -10,11 +10,13 @@ export class Document<DataType extends IDEnabled, SubCollections> implements Col
     reference: DocumentReference;
     [immerable] = true;
 
-    constructor(data: DataType, reference: DocumentReference, subCollections: SubCollections) {
-        this.reference = reference;
+    constructor(data: DataType, reference?: DocumentReference, subCollections?: SubCollections) {
         this.data = data;
-        this.collections = subCollections;
-        this.setReferenceToSubCollections();
+        if (reference != null && subCollections != null) {
+            this.reference = reference;
+            this.collections = subCollections;
+            this.setReferenceToSubCollections();
+        }
     }
 
     setReferenceToSubCollections(): void {

@@ -7,7 +7,7 @@ export declare class Document<DataType extends IDEnabled, SubCollections> implem
     data: Readonly<DataType>;
     reference: DocumentReference;
     [immerable]: boolean;
-    constructor(data: DataType, reference: DocumentReference, subCollections: SubCollections);
+    constructor(data: DataType, reference?: DocumentReference, subCollections?: SubCollections);
     setReferenceToSubCollections(): void;
     id(): string;
     modifyData(newData: Partial<DataType>): DataType;
