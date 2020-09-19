@@ -1,28 +1,23 @@
 import { IDEnabled } from '../types/IDEnabled';
-import { CollectionHolder } from './reservedTypes/CollectionHolder';
-import { DatabaseReferenceHolder } from './reservedTypes/DatabaseReferenceHolder';
-import { CollectionData } from './reservedTypes/CollectionData';
 import { isCollectionReference, CollectionReference } from '../types/CollectionReference';
 import { v4 as uuidv4 } from 'uuid';
 import { Document } from './Document';
 import shareDatabaseReference from './shareDatabaseReference';
 import produce from 'immer';
-import { SortingPredicate } from '../types/SortingPredicate';
-import { FilterPredicate } from '../types/FilterPredicate';
-import { PaginationPredicate } from '../types/PaginationPredicate';
+import { SortingPredicate, FilterPredicate, PaginationPredicate } from '../types';
+import { CollectionData } from '../types/reserved/CollectionData';
+import { CollectionHolder } from '../types/reserved/CollectionHolder';
+import { Query } from '../types/FirebaseQuery';
 
-export class Collection<DataType extends IDEnabled, SubCollections>
-    implements IDEnabled, CollectionHolder<SubCollections>, DatabaseReferenceHolder, CollectionData {
+export class Collection<DataType extends IDEnabled, SubCollections> implements IDEnabled, CollectionHolder<SubCollections>, CollectionData {
     id: string;
     collections: SubCollections;
-    db: firebase.firestore.Firestore | null;
     reference: CollectionReference | null;
     private subscriptions: Array<() => void> = [];
     private nextVisibleIndex: number;
 
     constructor(id: string, subCollections: SubCollections) {
         this.id = id;
-        this.db = null;
         this.reference = null;
         this.collections = subCollections;
         this.nextVisibleIndex = 0;
@@ -30,8 +25,8 @@ export class Collection<DataType extends IDEnabled, SubCollections>
 
     setReference(reference: CollectionReference): void {
         this.reference = reference;
-        if (this.db != null && this.collections != null) {
-            shareDatabaseReference(this.collections, this.db);
+        if (this.collections != null) {
+            shareDatabaseReference(this.collections);
         }
     }
 
@@ -70,7 +65,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
         sortingPredicate?: SortingPredicate,
         filterPredicate?: FilterPredicate,
         paginationPredicate?: PaginationPredicate,
-        editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query
+        editQuery?: (reference: CollectionReference | Query) => Query
     ): Promise<Array<Document<DataType, SubCollections>>> {
         const reference = this.getCollectionReference();
         const query = this.getQuery(reference, sortingPredicate, filterPredicate, paginationPredicate, editQuery);
@@ -134,7 +129,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
         onError: (error: Error) => void,
         sortingPredicate?: SortingPredicate,
         filterPredicate?: FilterPredicate,
-        editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query
+        editQuery?: (reference: CollectionReference | Query) => Query
     ): () => void {
         const reference = this.getCollectionReference();
         const query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
@@ -164,7 +159,7 @@ export class Collection<DataType extends IDEnabled, SubCollections>
         onError: (error: Error) => void,
         sortingPredicate?: SortingPredicate,
         filterPredicate?: FilterPredicate,
-        editQuery?: (reference: CollectionReference | firebase.firestore.Query) => firebase.firestore.Query
+        editQuery?: (reference: CollectionReference | Query) => Query
     ): () => void {
         const reference = this.getCollectionReference();
         const query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
@@ -214,13 +209,13 @@ export class Collection<DataType extends IDEnabled, SubCollections>
     }
 
     private getQuery(
-        reference: CollectionReference,
+        reference: CollectionReference | Query,
         sortingPredicate?: SortingPredicate,
         filterPredicate?: FilterPredicate,
         paginationPredicate?: PaginationPredicate,
-        editQuery?: (reference: CollectionReference | firebase.firestore.Query) => CollectionReference | firebase.firestore.Query
-    ): CollectionReference | firebase.firestore.Query {
-        let newReference: firebase.firestore.Query | CollectionReference = reference;
+        editQuery?: (reference: CollectionReference | Query) => CollectionReference | Query
+    ): CollectionReference | Query {
+        let newReference = reference;
         if (sortingPredicate != null) {
             newReference = newReference.orderBy(sortingPredicate.property, sortingPredicate.direction);
         }

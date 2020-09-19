@@ -1,8 +1,7 @@
-import { isCollectionData } from './reservedTypes/CollectionData';
-import { IDEnabled } from '../types/IDEnabled';
-import { CollectionHolder } from './reservedTypes/CollectionHolder';
 import produce, { immerable } from 'immer';
-import { DocumentReference } from '../types';
+import { DocumentReference, IDEnabled } from '../types';
+import { isCollectionData } from '../types/reserved/CollectionData';
+import { CollectionHolder } from '../types/reserved/CollectionHolder';
 
 export class Document<DataType extends IDEnabled, SubCollections> implements CollectionHolder<SubCollections> {
     collections: SubCollections;
@@ -10,13 +9,11 @@ export class Document<DataType extends IDEnabled, SubCollections> implements Col
     reference: DocumentReference;
     [immerable] = true;
 
-    constructor(data: DataType, reference?: DocumentReference, subCollections?: SubCollections) {
+    constructor(data: DataType, reference: DocumentReference, subCollections: SubCollections) {
         this.data = data;
-        if (reference != null && subCollections != null) {
-            this.reference = reference;
-            this.collections = subCollections;
-            this.setReferenceToSubCollections();
-        }
+        this.reference = reference;
+        this.collections = subCollections;
+        this.setReferenceToSubCollections();
     }
 
     setReferenceToSubCollections(): void {
