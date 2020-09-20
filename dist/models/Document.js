@@ -5,9 +5,11 @@ var Document = /** @class */ (function () {
     function Document(data, reference, subCollections) {
         this[_a] = true;
         this.data = data;
-        this.reference = reference;
-        this.collections = subCollections;
-        this.setReferenceToSubCollections();
+        if (reference != null && subCollections != null) {
+            this.reference = reference;
+            this.collections = subCollections;
+            this.setReferenceToSubCollections();
+        }
     }
     Document.prototype.setReferenceToSubCollections = function () {
         var _this = this;
