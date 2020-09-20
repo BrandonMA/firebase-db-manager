@@ -1,6 +1,6 @@
 {
     "name": "@bma98/firebase-db-manager",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Firebase wrapper to have more self explenatory methods.",
     "author": "BrandonMA",
     "license": "MIT",
