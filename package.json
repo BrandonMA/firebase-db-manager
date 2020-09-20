@@ -35,8 +35,8 @@
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
         "expo-module-scripts": "^1.2.0",
-        "firebase": "^7.9.0",
-        "immer": "^7.0.8",
+        "firebase": "^7.21.0",
+        "immer": "^7.0.9",
         "prettier": "^2.0.4",
         "ts-node": "^8.10.1",
         "typescript": "^3.9.2"
@@ -47,7 +47,7 @@
     "peerDependencies": {
         "@react-native-firebase/app": "^8.4.3",
         "@react-native-firebase/firestore": "^7.8.2",
-        "firebase": "^7.9.0",
-        "immer": "^7.0.8"
+        "firebase": "^7.21.0",
+        "immer": "^7.0.9"
     }
 }
