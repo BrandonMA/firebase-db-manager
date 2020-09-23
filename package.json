@@ -6,10 +6,6 @@
     "license": "MIT",
     "repository": "BrandonMA/firebase-db-manager",
     "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "module": "dist/index.modern.js",
-    "unpkg": "dist/index.umd.js",
-    "source": "src/index.ts",
     "scripts": {
         "build": "expo-module build",
         "clean": "expo-module clean",
