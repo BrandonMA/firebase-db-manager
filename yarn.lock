@@ -1480,6 +1480,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.8.2.tgz#732a5743a37e5e238c748e03bfb41c38ccb04fdd"
   integrity sha512-eqKk/Z+dYpcVfHzI9tQ+/s2fqsZwYbyheazP7yWthF4D9EMoe6BNPVE4AuFvPrrAsnxJebH9a/9jhP3YaMj/Zw==
 
+"@react-native-firebase/storage@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-7.4.3.tgz#efee8fee66e54312a2b3a400b28b0d751c9d6893"
+  integrity sha512-C3pOQi0rEHYZo+CUdy+KA8LqcEG4in8B6jUJKOXq4tSK/fAflr287GWBcgNj6iWYJMwr3PCkMvGmfsm6+hzkDw==
+
 "@types/babel__core@^7.1.0":
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.9.tgz#77e59d438522a6fb898fa43dc3455c6e72f3963d"

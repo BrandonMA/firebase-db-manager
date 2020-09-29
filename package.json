@@ -19,6 +19,7 @@
     "devDependencies": {
         "@react-native-firebase/app": "^8.4.3",
         "@react-native-firebase/firestore": "^7.8.2",
+        "@react-native-firebase/storage": "^7.4.3",
         "@types/uuid": "^7.0.3",
         "@typescript-eslint/eslint-plugin": "^2.26.0",
         "@typescript-eslint/parser": "^2.26.0",
@@ -43,6 +44,7 @@
     "peerDependencies": {
         "@react-native-firebase/app": "^8.4.3",
         "@react-native-firebase/firestore": "^7.8.2",
+        "@react-native-firebase/storage": "^7.4.3",
         "firebase": "^7.21.0",
         "immer": "^7.0.9"
     }
