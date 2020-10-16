@@ -1,1 +1,0 @@
-{"version":3,"file":"createTimestamp.native.js","sourceRoot":"","sources":["../../../src/types/Timestamp/createTimestamp.native.ts"],"names":[],"mappings":"AACA,OAAO,SAAS,MAAM,kCAAkC,CAAC;AAEzD,MAAM,UAAU,eAAe,CAAC,IAAW;IACvC,OAAO,IAAI,IAAI,IAAI,CAAC,CAAC,CAAC,SAAS,CAAC,SAAS,CAAC,QAAQ,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,SAAS,CAAC,SAAS,CAAC,GAAG,EAAE,CAAC;AACzF,CAAC"}
