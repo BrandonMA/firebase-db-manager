@@ -7,14 +7,11 @@
     "repository": "BrandonMA/firebase-db-manager",
     "main": "dist/index.js",
     "scripts": {
+        "start": "ts-node index.ts",
         "build": "expo-module build",
-        "clean": "expo-module clean",
-        "test": "expo-module test",
-        "prepare": "expo-module prepare",
-        "prepublishOnly": "expo-module prepublishOnly",
-        "expo-module": "expo-module",
-        "format": "prettier --write \"src/**/*.ts\"",
-        "lint": "eslint src --ext .ts,.tsx"
+        "clean": "rm -rf ./dist",
+        "format": "prettier --write App.tsx src/**/*.{ts,tsx}",
+        "lint": "eslint src/ --fix"
     },
     "devDependencies": {
         "@react-native-firebase/app": "^8.4.3",
@@ -36,14 +33,15 @@
         "immer": "^7.0.9",
         "prettier": "^2.0.4",
         "ts-node": "^8.10.1",
-        "typescript": "^3.9.2"
+        "typescript": "^3.9.2",
+        "utility-types": "^3.10.0"
     },
     "dependencies": {
-        "uuid": "^3.4.0",
         "@react-native-firebase/app": "^8.4.3",
         "@react-native-firebase/firestore": "^7.8.2",
         "@react-native-firebase/storage": "^7.4.3",
         "firebase": "^7.21.0",
-        "immer": "^7.0.9"
+        "immer": "^7.0.9",
+        "uuid": "^3.4.0"
     }
 }

@@ -1,13 +1,21 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { CollectionReference } from '../../types';
-import { isCollectionData } from '../../types/reserved/CollectionData';
+import { CollectionReference, DocumentReference } from '../../types';
+import { isReferenceHolder } from '../../types/CollectionData';
 
-export default function shareDatabaseReference<Collections>(collections: Collections): void {
-    const values = Object.values(collections);
-    values.forEach((collection) => {
-        if (isCollectionData(collection)) {
-            collection.setReference((firebase.firestore().collection(collection.id) as unknown) as CollectionReference);
+export default function shareDatabaseReference<Collections>(
+    collections: Collections,
+    reference?: DocumentReference | firebase.firestore.Firestore
+): Collections {
+    const newEntries = Object.entries(collections).map((entry): [string, unknown] => {
+        const [key, collection] = entry;
+        if (isReferenceHolder(collection)) {
+            const finalReference = reference ?? firebase.firestore();
+            const newCollection = collection.setReference((finalReference.collection(collection.id) as unknown) as CollectionReference);
+            return [key, newCollection];
+        } else {
+            return [key, collection];
         }
     });
+    return (Object.fromEntries(newEntries) as unknown) as Collections;
 }

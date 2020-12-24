@@ -2,42 +2,38 @@ import { IDEnabled } from '../types/IDEnabled';
 import { isCollectionReference, CollectionReference } from '../types/CollectionReference';
 import { v4 as uuidv4 } from 'uuid';
 import { Document } from './Document';
-import shareDatabaseReference from './shareDatabaseReference';
-import produce from 'immer';
+import produce, { immerable } from 'immer';
 import { SortingPredicate, FilterPredicate, PaginationPredicate } from '../types';
-import { CollectionData } from '../types/reserved/CollectionData';
-import { CollectionHolder } from '../types/reserved/CollectionHolder';
+import { ReferenceHolder } from '../types/CollectionData';
 import { Query } from '../types/FirebaseQuery';
+import { Optional } from 'utility-types';
 
-export class Collection<DataType extends IDEnabled, SubCollections> implements IDEnabled, CollectionHolder<SubCollections>, CollectionData {
+export class Collection<DataType extends IDEnabled, SubCollections> implements IDEnabled, ReferenceHolder {
     id: string;
     collections: SubCollections;
-    reference: CollectionReference | null;
-    private subscriptions: Array<() => void> = [];
-    private nextVisibleIndex: number;
+    private reference: CollectionReference | null;
+    [immerable] = true;
 
     constructor(id: string, subCollections: SubCollections) {
         this.id = id;
         this.reference = null;
         this.collections = subCollections;
-        this.nextVisibleIndex = 0;
     }
 
-    setReference(reference: CollectionReference): void {
-        this.reference = reference;
-        if (this.collections != null) {
-            shareDatabaseReference(this.collections);
-        }
+    setReference(reference: CollectionReference): Collection<DataType, SubCollections> {
+        return produce(this, (draft: Collection<DataType, SubCollections>) => {
+            draft.reference = reference;
+        });
     }
 
     // Document creation
 
-    async createDocument(data: DataType, skipAwait?: boolean): Promise<Document<DataType, SubCollections>> {
+    async createDocument(data: Optional<DataType, 'id'>, skipAwait?: boolean): Promise<Document<DataType, SubCollections>> {
         const reference = this.getCollectionReference();
         const id = data.id ? data.id : uuidv4();
-        const newData = produce(data, (draft) => {
+        const newData = produce(data, (draft: DataType) => {
             draft.id = id;
-        });
+        }) as DataType;
         const documentReference = reference.doc(id);
         if (skipAwait) {
             documentReference.set(newData, { merge: true });
@@ -61,7 +57,7 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         }
     }
 
-    async get(
+    async getDocuments(
         sortingPredicate?: SortingPredicate,
         filterPredicate?: FilterPredicate,
         paginationPredicate?: PaginationPredicate,
@@ -71,7 +67,6 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         const query = this.getQuery(reference, sortingPredicate, filterPredicate, paginationPredicate, editQuery);
         const snapshot = await query.get();
         if (!snapshot.empty) {
-            this.nextVisibleIndex += snapshot.size + 1; // Page size would be the index for the last document retreived, so add one.
             return snapshot.docs.map((firebaseDocument) => {
                 const data = firebaseDocument.data() as DataType;
                 return new Document(data, firebaseDocument.ref, this.collections);
@@ -106,7 +101,7 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         onDataDoesNotExist: () => void
     ): () => void {
         const reference = this.getCollectionReference();
-        const subscription = reference.doc(id).onSnapshot(
+        return reference.doc(id).onSnapshot(
             (snapshot) => {
                 if (snapshot.exists) {
                     const data = snapshot.data() as DataType;
@@ -120,11 +115,9 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
                 onError(error);
             }
         );
-        this.subscriptions.push(subscription);
-        return subscription;
     }
 
-    subscribe(
+    subscribeToDocuments(
         onDataChange: (documents: Array<Document<DataType, SubCollections>>) => void,
         onError: (error: Error) => void,
         sortingPredicate?: SortingPredicate,
@@ -133,7 +126,7 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
     ): () => void {
         const reference = this.getCollectionReference();
         const query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
-        const subscription = query.onSnapshot(
+        return query.onSnapshot(
             (snapshot) => {
                 if (!snapshot.empty) {
                     const documents = snapshot.docs.map((firebaseDocument) => {
@@ -149,56 +142,9 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
                 onError(error);
             }
         );
-        this.subscriptions.push(subscription);
-        return subscription;
-    }
-
-    // Implementation is not final, we must pass an original reference, passing a new array everytime is kind of useless.
-    subscribeWithDiffing(
-        onDataChange: (document: Map<string, Document<DataType, SubCollections>>) => void,
-        onError: (error: Error) => void,
-        sortingPredicate?: SortingPredicate,
-        filterPredicate?: FilterPredicate,
-        editQuery?: (reference: CollectionReference | Query) => Query
-    ): () => void {
-        const reference = this.getCollectionReference();
-        const query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
-        const subscription = query.onSnapshot(
-            (snapshot) => {
-                if (!snapshot.empty) {
-                    const map = new Map<string, Document<DataType, SubCollections>>();
-                    snapshot.docChanges().forEach((change) => {
-                        const data = change.doc.data() as DataType;
-                        switch (change.type) {
-                            case 'added':
-                            case 'modified':
-                                map.set(data.id, new Document(data, change.doc.ref, this.collections));
-                                break;
-                            case 'removed':
-                                map.delete(data.id);
-                                break;
-                        }
-                    });
-                    onDataChange(map);
-                }
-            },
-            (error) => {
-                onError(error);
-            }
-        );
-        this.subscriptions.push(subscription);
-        return subscription;
     }
 
     // Utility Methods
-
-    removeAllSubscriptions(): void {
-        this.subscriptions.forEach((subscription) => subscription());
-    }
-
-    resetPagination(): void {
-        this.nextVisibleIndex = 0;
-    }
 
     private getCollectionReference(): CollectionReference {
         if (this.reference != null && isCollectionReference(this.reference)) {
@@ -216,23 +162,24 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         editQuery?: (reference: CollectionReference | Query) => CollectionReference | Query
     ): CollectionReference | Query {
         let newReference = reference;
+
         if (sortingPredicate != null) {
             newReference = newReference.orderBy(sortingPredicate.property, sortingPredicate.direction);
         }
+
         if (filterPredicate != null) {
             newReference = newReference.where(filterPredicate.property, filterPredicate.direction, filterPredicate.value);
         }
-        if (paginationPredicate != null) {
-            if (paginationPredicate.page != null) {
-                const lastIndex = paginationPredicate.pageSize * paginationPredicate.page + (paginationPredicate.page > 0 ? 1 : 0);
-                newReference = newReference.startAt(lastIndex).limit(paginationPredicate.pageSize);
-            } else {
-                newReference = newReference.startAt(this.nextVisibleIndex).limit(paginationPredicate.pageSize);
-            }
+
+        if (paginationPredicate != null && paginationPredicate.page != null) {
+            const lastIndex = paginationPredicate.pageSize * paginationPredicate.page + (paginationPredicate.page > 0 ? 1 : 0);
+            newReference = newReference.startAt(lastIndex).limit(paginationPredicate.pageSize);
         }
+
         if (editQuery != null) {
             newReference = editQuery(newReference);
         }
+
         return newReference;
     }
 }

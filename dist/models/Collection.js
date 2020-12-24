@@ -1,3 +1,23 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,35 +54,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { isCollectionReference } from '../types/CollectionReference';
-import { v4 as uuidv4 } from 'uuid';
-import { Document } from './Document';
-import shareDatabaseReference from './shareDatabaseReference';
-import produce from 'immer';
+var _a;
+exports.__esModule = true;
+exports.Collection = void 0;
+var CollectionReference_1 = require("../types/CollectionReference");
+var uuid_1 = require("uuid");
+var Document_1 = require("./Document");
+var immer_1 = __importStar(require("immer"));
 var Collection = /** @class */ (function () {
     function Collection(id, subCollections) {
-        this.subscriptions = [];
+        this[_a] = true;
         this.id = id;
         this.reference = null;
         this.collections = subCollections;
-        this.nextVisibleIndex = 0;
     }
     Collection.prototype.setReference = function (reference) {
-        this.reference = reference;
-        if (this.collections != null) {
-            shareDatabaseReference(this.collections);
-        }
+        return immer_1["default"](this, function (draft) {
+            draft.reference = reference;
+        });
     };
     // Document creation
     Collection.prototype.createDocument = function (data, skipAwait) {
         return __awaiter(this, void 0, void 0, function () {
             var reference, id, newData, documentReference;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         reference = this.getCollectionReference();
-                        id = data.id ? data.id : uuidv4();
-                        newData = produce(data, function (draft) {
+                        id = data.id ? data.id : uuid_1.v4();
+                        newData = immer_1["default"](data, function (draft) {
                             draft.id = id;
                         });
                         documentReference = reference.doc(id);
@@ -71,9 +91,9 @@ var Collection = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 1: return [4 /*yield*/, documentReference.set(newData, { merge: true })];
                     case 2:
-                        _a.sent();
-                        _a.label = 3;
-                    case 3: return [2 /*return*/, new Document(newData, documentReference, this.collections)];
+                        _b.sent();
+                        _b.label = 3;
+                    case 3: return [2 /*return*/, new Document_1.Document(newData, documentReference, this.collections)];
                 }
             });
         });
@@ -82,17 +102,17 @@ var Collection = /** @class */ (function () {
     Collection.prototype.getDocument = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var reference, documentReference, response, data;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         reference = this.getCollectionReference();
                         documentReference = reference.doc(id);
                         return [4 /*yield*/, documentReference.get()];
                     case 1:
-                        response = _a.sent();
+                        response = _b.sent();
                         if (response.exists) {
                             data = response.data();
-                            return [2 /*return*/, new Document(data, documentReference, this.collections)];
+                            return [2 /*return*/, new Document_1.Document(data, documentReference, this.collections)];
                         }
                         else {
                             throw Error('Document does not exist, check your id');
@@ -102,23 +122,22 @@ var Collection = /** @class */ (function () {
             });
         });
     };
-    Collection.prototype.get = function (sortingPredicate, filterPredicate, paginationPredicate, editQuery) {
+    Collection.prototype.getDocuments = function (sortingPredicate, filterPredicate, paginationPredicate, editQuery) {
         return __awaiter(this, void 0, void 0, function () {
             var reference, query, snapshot;
             var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         reference = this.getCollectionReference();
                         query = this.getQuery(reference, sortingPredicate, filterPredicate, paginationPredicate, editQuery);
                         return [4 /*yield*/, query.get()];
                     case 1:
-                        snapshot = _a.sent();
+                        snapshot = _b.sent();
                         if (!snapshot.empty) {
-                            this.nextVisibleIndex += snapshot.size + 1; // Page size would be the index for the last document retreived, so add one.
                             return [2 /*return*/, snapshot.docs.map(function (firebaseDocument) {
                                     var data = firebaseDocument.data();
-                                    return new Document(data, firebaseDocument.ref, _this.collections);
+                                    return new Document_1.Document(data, firebaseDocument.ref, _this.collections);
                                 })];
                         }
                         else {
@@ -133,15 +152,15 @@ var Collection = /** @class */ (function () {
     Collection.prototype.updateDocument = function (data) {
         return __awaiter(this, void 0, void 0, function () {
             var reference, documentReference;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         reference = this.getCollectionReference();
                         documentReference = reference.doc(data.id);
                         return [4 /*yield*/, documentReference.update(data)];
                     case 1:
-                        _a.sent();
-                        return [2 /*return*/, new Document(data, documentReference, this.collections)];
+                        _b.sent();
+                        return [2 /*return*/, new Document_1.Document(data, documentReference, this.collections)];
                 }
             });
         });
@@ -150,13 +169,13 @@ var Collection = /** @class */ (function () {
     Collection.prototype.deleteDocument = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var reference;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         reference = this.getCollectionReference();
                         return [4 /*yield*/, reference.doc(id)["delete"]()];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         return [2 /*return*/];
                 }
             });
@@ -166,10 +185,10 @@ var Collection = /** @class */ (function () {
     Collection.prototype.subscribeToDocument = function (id, onDataChange, onError, onDataDoesNotExist) {
         var _this = this;
         var reference = this.getCollectionReference();
-        var subscription = reference.doc(id).onSnapshot(function (snapshot) {
+        return reference.doc(id).onSnapshot(function (snapshot) {
             if (snapshot.exists) {
                 var data = snapshot.data();
-                var document_1 = new Document(data, snapshot.ref, _this.collections);
+                var document_1 = new Document_1.Document(data, snapshot.ref, _this.collections);
                 onDataChange(document_1);
             }
             else {
@@ -178,18 +197,16 @@ var Collection = /** @class */ (function () {
         }, function (error) {
             onError(error);
         });
-        this.subscriptions.push(subscription);
-        return subscription;
     };
-    Collection.prototype.subscribe = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
+    Collection.prototype.subscribeToDocuments = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
         var _this = this;
         var reference = this.getCollectionReference();
         var query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
-        var subscription = query.onSnapshot(function (snapshot) {
+        return query.onSnapshot(function (snapshot) {
             if (!snapshot.empty) {
                 var documents = snapshot.docs.map(function (firebaseDocument) {
                     var data = firebaseDocument.data();
-                    return new Document(data, firebaseDocument.ref, _this.collections);
+                    return new Document_1.Document(data, firebaseDocument.ref, _this.collections);
                 });
                 onDataChange(documents);
             }
@@ -199,46 +216,10 @@ var Collection = /** @class */ (function () {
         }, function (error) {
             onError(error);
         });
-        this.subscriptions.push(subscription);
-        return subscription;
-    };
-    // Implementation is not final, we must pass an original reference, passing a new array everytime is kind of useless.
-    Collection.prototype.subscribeWithDiffing = function (onDataChange, onError, sortingPredicate, filterPredicate, editQuery) {
-        var _this = this;
-        var reference = this.getCollectionReference();
-        var query = this.getQuery(reference, sortingPredicate, filterPredicate, undefined, editQuery);
-        var subscription = query.onSnapshot(function (snapshot) {
-            if (!snapshot.empty) {
-                var map_1 = new Map();
-                snapshot.docChanges().forEach(function (change) {
-                    var data = change.doc.data();
-                    switch (change.type) {
-                        case 'added':
-                        case 'modified':
-                            map_1.set(data.id, new Document(data, change.doc.ref, _this.collections));
-                            break;
-                        case 'removed':
-                            map_1["delete"](data.id);
-                            break;
-                    }
-                });
-                onDataChange(map_1);
-            }
-        }, function (error) {
-            onError(error);
-        });
-        this.subscriptions.push(subscription);
-        return subscription;
     };
     // Utility Methods
-    Collection.prototype.removeAllSubscriptions = function () {
-        this.subscriptions.forEach(function (subscription) { return subscription(); });
-    };
-    Collection.prototype.resetPagination = function () {
-        this.nextVisibleIndex = 0;
-    };
     Collection.prototype.getCollectionReference = function () {
-        if (this.reference != null && isCollectionReference(this.reference)) {
+        if (this.reference != null && CollectionReference_1.isCollectionReference(this.reference)) {
             return this.reference;
         }
         else {
@@ -253,14 +234,9 @@ var Collection = /** @class */ (function () {
         if (filterPredicate != null) {
             newReference = newReference.where(filterPredicate.property, filterPredicate.direction, filterPredicate.value);
         }
-        if (paginationPredicate != null) {
-            if (paginationPredicate.page != null) {
-                var lastIndex = paginationPredicate.pageSize * paginationPredicate.page + (paginationPredicate.page > 0 ? 1 : 0);
-                newReference = newReference.startAt(lastIndex).limit(paginationPredicate.pageSize);
-            }
-            else {
-                newReference = newReference.startAt(this.nextVisibleIndex).limit(paginationPredicate.pageSize);
-            }
+        if (paginationPredicate != null && paginationPredicate.page != null) {
+            var lastIndex = paginationPredicate.pageSize * paginationPredicate.page + (paginationPredicate.page > 0 ? 1 : 0);
+            newReference = newReference.startAt(lastIndex).limit(paginationPredicate.pageSize);
         }
         if (editQuery != null) {
             newReference = editQuery(newReference);
@@ -269,5 +245,6 @@ var Collection = /** @class */ (function () {
     };
     return Collection;
 }());
-export { Collection };
+exports.Collection = Collection;
+_a = immer_1.immerable;
 //# sourceMappingURL=Collection.js.map

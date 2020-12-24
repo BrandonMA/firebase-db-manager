@@ -1,2 +1,4 @@
+import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-export default function shareDatabaseReference<Collections>(collections: Collections): void;
+import { DocumentReference } from '../../types';
+export default function shareDatabaseReference<Collections>(collections: Collections, reference?: DocumentReference | firebase.firestore.Firestore): Collections;

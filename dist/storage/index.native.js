@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,14 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import storage from '@react-native-firebase/storage';
-export function uploadFile(path, filePath) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+exports.__esModule = true;
+exports.uploadFile = void 0;
+var storage_1 = __importDefault(require("@react-native-firebase/storage"));
+function uploadFile(path, filePath) {
     return __awaiter(this, void 0, void 0, function () {
         var reference;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    reference = storage().ref(path);
+                    reference = storage_1["default"]().ref(path);
                     return [4 /*yield*/, reference.putFile(filePath)];
                 case 1:
                     _a.sent();
@@ -50,4 +56,5 @@ export function uploadFile(path, filePath) {
         });
     });
 }
+exports.uploadFile = uploadFile;
 //# sourceMappingURL=index.native.js.map

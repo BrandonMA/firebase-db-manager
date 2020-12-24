@@ -1,5 +1,6 @@
-import { CollectionHolder } from '../types/reserved/CollectionHolder';
-export declare class Database<Collections> implements CollectionHolder<Collections> {
+import { immerable } from 'immer';
+export declare class Database<Collections> {
     collections: Collections;
+    [immerable]: boolean;
     constructor(collections: Collections);
 }

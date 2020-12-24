@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -11,13 +12,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Collection } from './Collection';
+exports.__esModule = true;
+exports.SubCollection = void 0;
+var Collection_1 = require("./Collection");
 var SubCollection = /** @class */ (function (_super) {
     __extends(SubCollection, _super);
     function SubCollection() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SubCollection;
-}(Collection));
-export { SubCollection };
+}(Collection_1.Collection));
+exports.SubCollection = SubCollection;
 //# sourceMappingURL=SubCollection.js.map

@@ -1,11 +1,11 @@
-import { CollectionHolder } from '../types/reserved/CollectionHolder';
+import { immerable } from 'immer';
 import shareDatabaseReference from './shareDatabaseReference';
 
-export class Database<Collections> implements CollectionHolder<Collections> {
+export class Database<Collections> {
     collections: Collections;
+    [immerable] = true;
 
     constructor(collections: Collections) {
-        shareDatabaseReference(collections);
-        this.collections = collections;
+        this.collections = shareDatabaseReference(collections);
     }
 }
