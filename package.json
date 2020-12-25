@@ -37,11 +37,13 @@
         "utility-types": "^3.10.0"
     },
     "dependencies": {
+        "immer": "^8.0.0",
+        "uuid": "^3.4.0"
+    },
+    "peerDependencies": {
         "@react-native-firebase/app": "^10.3.0",
         "@react-native-firebase/firestore": "^10.3.1",
         "@react-native-firebase/storage": "^10.3.1",
-        "firebase": "^8.2.1",
-        "immer": "^8.0.0",
-        "uuid": "^3.4.0"
+        "firebase": "^8.2.1"
     }
 }

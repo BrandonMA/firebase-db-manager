@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/storage';
 
 export async function uploadFile(path: string, filePath: string): Promise<string> {

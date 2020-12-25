@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { CollectionReference, DocumentReference } from '../../types';
 import { isReferenceHolder } from '../../types/CollectionData';

@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -75,13 +75,14 @@ var Collection = /** @class */ (function () {
     };
     // Document creation
     Collection.prototype.createDocument = function (data, skipAwait) {
+        var _b;
         return __awaiter(this, void 0, void 0, function () {
             var reference, id, newData, documentReference;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         reference = this.getCollectionReference();
-                        id = data.id ? data.id : uuid_1.v4();
+                        id = (_b = data.id) !== null && _b !== void 0 ? _b : uuid_1.v4();
                         newData = immer_1["default"](data, function (draft) {
                             draft.id = id;
                         });
@@ -91,8 +92,8 @@ var Collection = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 1: return [4 /*yield*/, documentReference.set(newData, { merge: true })];
                     case 2:
-                        _b.sent();
-                        _b.label = 3;
+                        _c.sent();
+                        _c.label = 3;
                     case 3: return [2 /*return*/, new Document_1.Document(newData, documentReference, this.collections)];
                 }
             });

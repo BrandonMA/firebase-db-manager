@@ -30,7 +30,7 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
 
     async createDocument(data: Optional<DataType, 'id'>, skipAwait?: boolean): Promise<Document<DataType, SubCollections>> {
         const reference = this.getCollectionReference();
-        const id = data.id ? data.id : uuidv4();
+        const id = data.id ?? uuidv4();
         const newData = produce(data, (draft: DataType) => {
             draft.id = id;
         }) as DataType;
