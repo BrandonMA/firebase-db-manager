@@ -28,7 +28,7 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
 
     // Document creation
 
-    async createDocument(data: Optional<DataType, 'id'>, skipAwait?: boolean): Promise<Document<DataType, SubCollections>> {
+    async createDocument(data: Optional<DataType, 'id'>, skipAwait?: boolean, merge = true): Promise<Document<DataType, SubCollections>> {
         const reference = this.getCollectionReference();
         const id = data.id ?? uuidv4();
         const newData = produce(data, (draft: DataType) => {
@@ -36,9 +36,9 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         }) as DataType;
         const documentReference = reference.doc(id);
         if (skipAwait) {
-            documentReference.set(newData, { merge: true });
+            documentReference.set(newData, { merge });
         } else {
-            await documentReference.set(newData, { merge: true });
+            await documentReference.set(newData, { merge });
         }
         return new Document(newData, documentReference, this.collections);
     }
