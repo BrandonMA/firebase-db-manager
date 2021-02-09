@@ -54,6 +54,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _a;
 exports.__esModule = true;
 exports.Collection = void 0;
@@ -61,6 +64,7 @@ var CollectionReference_1 = require("../types/CollectionReference");
 var uuid_1 = require("uuid");
 var Document_1 = require("./Document");
 var immer_1 = __importStar(require("immer"));
+var batch_1 = __importDefault(require("./batch"));
 var Collection = /** @class */ (function () {
     function Collection(id, subCollections) {
         this[_a] = true;
@@ -150,6 +154,23 @@ var Collection = /** @class */ (function () {
             });
         });
     };
+    // Setting
+    Collection.prototype.setDocument = function (newData) {
+        return __awaiter(this, void 0, void 0, function () {
+            var reference, documentReference;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        reference = this.getCollectionReference();
+                        documentReference = reference.doc(newData.id);
+                        return [4 /*yield*/, documentReference.set(newData)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/, new Document_1.Document(newData, documentReference, this.collections)];
+                }
+            });
+        });
+    };
     // Updating
     Collection.prototype.updateDocument = function (data) {
         return __awaiter(this, void 0, void 0, function () {
@@ -179,6 +200,28 @@ var Collection = /** @class */ (function () {
                     case 1:
                         _b.sent();
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Collection.prototype.deleteCollection = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var dbBatch, collectionReference, snapshot;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        dbBatch = batch_1["default"]();
+                        collectionReference = this.getCollectionReference();
+                        return [4 /*yield*/, collectionReference.get()];
+                    case 1:
+                        snapshot = _b.sent();
+                        if (!!snapshot.empty) return [3 /*break*/, 3];
+                        snapshot.docs.forEach(function (doc) { return dbBatch["delete"](doc.ref); });
+                        return [4 /*yield*/, dbBatch.commit()];
+                    case 2:
+                        _b.sent();
+                        _b.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });
