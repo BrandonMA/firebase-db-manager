@@ -7,6 +7,7 @@ import { SortingPredicate, FilterPredicate, PaginationPredicate } from '../types
 import { ReferenceHolder } from '../types/CollectionData';
 import { Query } from '../types/FirebaseQuery';
 import { Optional } from 'utility-types';
+import batch from './batch';
 
 export class Collection<DataType extends IDEnabled, SubCollections> implements IDEnabled, ReferenceHolder {
     id: string;
@@ -76,6 +77,15 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
         }
     }
 
+    // Setting
+
+    async setDocument(newData: DataType): Promise<Document<DataType, SubCollections>> {
+        const reference = this.getCollectionReference();
+        const documentReference = reference.doc(newData.id);
+        await documentReference.set(newData);
+        return new Document(newData, documentReference, this.collections);
+    }
+
     // Updating
 
     async updateDocument(data: DataType): Promise<Document<DataType, SubCollections>> {
@@ -90,6 +100,16 @@ export class Collection<DataType extends IDEnabled, SubCollections> implements I
     async deleteDocument(id: string): Promise<void> {
         const reference = this.getCollectionReference();
         await reference.doc(id).delete();
+    }
+
+    async deleteCollection(): Promise<void> {
+        const dbBatch = batch();
+        const collectionReference = this.getCollectionReference();
+        const snapshot = await collectionReference.get();
+        if (!snapshot.empty) {
+            snapshot.docs.forEach((doc: any) => dbBatch.delete(doc.ref));
+            await dbBatch.commit();
+        }
     }
 
     // Subscribing to changes
