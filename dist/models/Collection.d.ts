@@ -1,8 +1,6 @@
-import { IDEnabled } from '../types/IDEnabled';
-import { CollectionReference } from '../types/CollectionReference';
+import { CollectionReference, IDEnabled, SortingPredicate, FilterPredicate, PaginationPredicate } from '../types';
 import { Document } from './Document';
 import { immerable } from 'immer';
-import { SortingPredicate, FilterPredicate, PaginationPredicate } from '../types';
 import { ReferenceHolder } from '../types/CollectionData';
 import { Query } from '../types/FirebaseQuery';
 import { Optional } from 'utility-types';

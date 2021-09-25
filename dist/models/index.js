@@ -10,6 +10,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 exports.__esModule = true;
+__exportStar(require("./firestore"), exports);
+__exportStar(require("./batch"), exports);
+__exportStar(require("./functions"), exports);
 __exportStar(require("./Collection"), exports);
 __exportStar(require("./Database"), exports);
 __exportStar(require("./Document"), exports);

@@ -60,7 +60,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _a;
 exports.__esModule = true;
 exports.Collection = void 0;
-var CollectionReference_1 = require("../types/CollectionReference");
+var types_1 = require("../types");
 var uuid_1 = require("uuid");
 var Document_1 = require("./Document");
 var immer_1 = __importStar(require("immer"));
@@ -264,7 +264,7 @@ var Collection = /** @class */ (function () {
     };
     // Utility Methods
     Collection.prototype.getCollectionReference = function () {
-        if (this.reference != null && CollectionReference_1.isCollectionReference(this.reference)) {
+        if (this.reference != null && types_1.isCollectionReference(this.reference)) {
             return this.reference;
         }
         else {
