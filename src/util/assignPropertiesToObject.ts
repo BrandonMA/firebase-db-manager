@@ -1,9 +1,11 @@
-export function assignPropertiesToObject<T>(newObject: T, oldObject: T, assignNullable = false): void {
-    Object.keys(newObject).forEach(function (key) {
+import { Draft } from 'immer';
+
+export function assignPropertiesToObject<T>(draft: Draft<T>, dataToAssign: Partial<T>, assignNullable = false): void {
+    Object.keys(draft).forEach(function (key) {
         const propertyName = key as keyof T;
-        const oldValue = oldObject[propertyName];
-        if (oldValue != null || assignNullable) {
-            newObject[propertyName] = oldValue;
+        const value = (dataToAssign as T)[propertyName];
+        if (value != null || assignNullable) {
+            (draft as T)[propertyName] = value;
         }
     });
 }

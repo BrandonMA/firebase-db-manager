@@ -6,11 +6,10 @@ exports.__esModule = true;
 exports.produceFirebaseObject = void 0;
 var immer_1 = __importDefault(require("immer"));
 var assignPropertiesToObject_1 = require("./assignPropertiesToObject");
-function produceFirebaseObject(newObject, oldObject, assignNullable, callback) {
-    if (assignNullable === void 0) { assignNullable = false; }
-    return immer_1["default"](oldObject, function (draft) {
-        callback(draft);
-        return assignPropertiesToObject_1.assignPropertiesToObject(draft, newObject, assignNullable);
+function produceFirebaseObject(originalObject, dataToAssign, assignNullable, callback) {
+    return (0, immer_1["default"])(originalObject, function (draft) {
+        callback === null || callback === void 0 ? void 0 : callback(draft);
+        return (0, assignPropertiesToObject_1.assignPropertiesToObject)(draft, dataToAssign, assignNullable);
     });
 }
 exports.produceFirebaseObject = produceFirebaseObject;

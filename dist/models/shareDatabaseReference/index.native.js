@@ -8,8 +8,8 @@ var firestore_1 = __importDefault(require("@react-native-firebase/firestore"));
 function shareDatabaseReference(collections, reference) {
     var newEntries = Object.entries(collections).map(function (entry) {
         var key = entry[0], collection = entry[1];
-        if (CollectionData_1.isReferenceHolder(collection)) {
-            var finalReference = reference !== null && reference !== void 0 ? reference : firestore_1["default"]();
+        if ((0, CollectionData_1.isReferenceHolder)(collection)) {
+            var finalReference = reference !== null && reference !== void 0 ? reference : (0, firestore_1["default"])();
             var newCollection = collection.setReference(finalReference.collection(collection.id));
             return [key, newCollection];
         }

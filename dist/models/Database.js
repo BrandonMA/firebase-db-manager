@@ -10,7 +10,7 @@ var shareDatabaseReference_1 = __importDefault(require("./shareDatabaseReference
 var Database = /** @class */ (function () {
     function Database(collections) {
         this[_a] = true;
-        this.collections = shareDatabaseReference_1["default"](collections);
+        this.collections = (0, shareDatabaseReference_1["default"])(collections);
     }
     return Database;
 }());

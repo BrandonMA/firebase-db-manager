@@ -1,1 +1,2 @@
-export declare function assignPropertiesToObject<T>(newObject: T, oldObject: T, assignNullable?: boolean): void;
+import { Draft } from 'immer';
+export declare function assignPropertiesToObject<T>(draft: Draft<T>, dataToAssign: Partial<T>, assignNullable?: boolean): void;

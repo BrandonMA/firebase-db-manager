@@ -9,7 +9,7 @@ var CollectionData_1 = require("../../types/CollectionData");
 function shareDatabaseReference(collections, reference) {
     var newEntries = Object.entries(collections).map(function (entry) {
         var key = entry[0], collection = entry[1];
-        if (CollectionData_1.isReferenceHolder(collection)) {
+        if ((0, CollectionData_1.isReferenceHolder)(collection)) {
             var finalReference = reference !== null && reference !== void 0 ? reference : app_1["default"].firestore();
             var newCollection = collection.setReference(finalReference.collection(collection.id));
             return [key, newCollection];

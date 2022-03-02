@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -73,7 +77,7 @@ var Collection = /** @class */ (function () {
         this.collections = subCollections;
     }
     Collection.prototype.setReference = function (reference) {
-        return immer_1["default"](this, function (draft) {
+        return (0, immer_1["default"])(this, function (draft) {
             draft.reference = reference;
         });
     };
@@ -87,8 +91,8 @@ var Collection = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         reference = this.getCollectionReference();
-                        id = (_b = data.id) !== null && _b !== void 0 ? _b : uuid_1.v4();
-                        newData = immer_1["default"](data, function (draft) {
+                        id = (_b = data.id) !== null && _b !== void 0 ? _b : (0, uuid_1.v4)();
+                        newData = (0, immer_1["default"])(data, function (draft) {
                             draft.id = id;
                         });
                         documentReference = reference.doc(id);
@@ -210,7 +214,7 @@ var Collection = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        dbBatch = batch_1["default"]();
+                        dbBatch = (0, batch_1["default"])();
                         collectionReference = this.getCollectionReference();
                         return [4 /*yield*/, collectionReference.get()];
                     case 1:
@@ -264,7 +268,7 @@ var Collection = /** @class */ (function () {
     };
     // Utility Methods
     Collection.prototype.getCollectionReference = function () {
-        if (this.reference != null && types_1.isCollectionReference(this.reference)) {
+        if (this.reference != null && (0, types_1.isCollectionReference)(this.reference)) {
             return this.reference;
         }
         else {

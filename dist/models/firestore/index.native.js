@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var firestore_1 = __importDefault(require("@react-native-firebase/firestore"));
 function batch() {
-    return firestore_1["default"]();
+    return (0, firestore_1["default"])();
 }
 exports["default"] = batch;
 //# sourceMappingURL=index.native.js.map

@@ -47,7 +47,7 @@ function uploadFile(path, filePath) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    reference = storage_1["default"]().ref(path);
+                    reference = (0, storage_1["default"])().ref(path);
                     return [4 /*yield*/, reference.putFile(filePath)];
                 case 1:
                     _a.sent();

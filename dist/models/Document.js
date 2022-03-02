@@ -12,7 +12,7 @@ var Document = /** @class */ (function () {
         this[_a] = true;
         this.data = data;
         if (reference != null && subCollections != null) {
-            this.collections = shareDatabaseReference_1["default"](subCollections, reference);
+            this.collections = (0, shareDatabaseReference_1["default"])(subCollections, reference);
         }
     }
     Document.prototype.id = function () {

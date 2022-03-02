@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var functions_1 = __importDefault(require("@react-native-firebase/functions"));
 function functions() {
-    return functions_1["default"]();
+    return (0, functions_1["default"])();
 }
 exports["default"] = functions;
 //# sourceMappingURL=index.native.js.map
