@@ -29,8 +29,8 @@
         "eslint-plugin-prettier": "^3.3.0",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^5.0.0",
-        "expo-module-scripts": "^1.2.0",
-        "firebase": "^8.2.1",
+        "expo-module-scripts": "^2.1.1",
+        "firebase": "^9.10.0",
         "immer": "^9.0.6",
         "prettier": "^2.2.1",
         "ts-node": "^9.1.1",
@@ -46,7 +46,7 @@
         "@react-native-firebase/firestore": "^10.8.1",
         "@react-native-firebase/functions": "^10.8.1",
         "@react-native-firebase/storage": "^10.8.1",
-        "firebase": "^8.2.1"
+        "firebase": "^9.10.0"
     },
     "sideEffects": false
 }

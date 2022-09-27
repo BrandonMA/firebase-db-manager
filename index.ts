@@ -1,6 +1,6 @@
 import { Database, Collection, SubCollection, IDEnabled, createTimestamp, Timestamp } from './src';
 import { firebaseConfig } from './firebase';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 // Firebase setup
 
