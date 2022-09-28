@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.createGeoPoint = void 0;
-var app_1 = __importDefault(require("firebase/app"));
-require("firebase/firestore");
+var app_1 = __importDefault(require("firebase/compat/app"));
+require("firebase/compat/firestore");
 function createGeoPoint(latitude, longitude) {
     return new app_1["default"].firestore.GeoPoint(latitude, longitude);
 }

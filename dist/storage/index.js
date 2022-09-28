@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.uploadFile = void 0;
-var app_1 = __importDefault(require("firebase/app"));
-require("firebase/storage");
+var app_1 = __importDefault(require("firebase/compat/app"));
+require("firebase/compat/storage");
 function uploadFile(path, filePath) {
     return __awaiter(this, void 0, void 0, function () {
         var reference, response, blob;

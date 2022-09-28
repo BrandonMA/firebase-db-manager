@@ -1,3 +1,3 @@
-import firebase from 'firebase/app';
-import 'firebase/functions';
-export default function batch(): ReturnType<typeof firebase.functions>;
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/functions';
+export default function functions(): ReturnType<typeof firebase.functions>;
