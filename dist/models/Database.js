@@ -1,19 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var _a;
-exports.__esModule = true;
-exports.Database = void 0;
-var immer_1 = require("immer");
-var shareDatabaseReference_1 = __importDefault(require("./shareDatabaseReference"));
-var Database = /** @class */ (function () {
-    function Database(collections) {
+import { immerable } from 'immer';
+import shareDatabaseReference from './shareDatabaseReference';
+export class Database {
+    constructor(collections) {
         this[_a] = true;
-        this.collections = (0, shareDatabaseReference_1["default"])(collections);
+        this.collections = shareDatabaseReference(collections);
     }
-    return Database;
-}());
-exports.Database = Database;
-_a = immer_1.immerable;
+}
+_a = immerable;
 //# sourceMappingURL=Database.js.map

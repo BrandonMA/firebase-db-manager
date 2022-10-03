@@ -1,24 +1,16 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var app_1 = __importDefault(require("firebase/compat/app"));
-require("firebase/compat/firestore");
-var CollectionData_1 = require("../../types/CollectionData");
-function shareDatabaseReference(collections, reference) {
-    var newEntries = Object.entries(collections).map(function (entry) {
-        var key = entry[0], collection = entry[1];
-        if ((0, CollectionData_1.isReferenceHolder)(collection)) {
-            var finalReference = reference !== null && reference !== void 0 ? reference : app_1["default"].firestore();
-            var newCollection = collection.setReference(finalReference.collection(collection.id));
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import { isReferenceHolder } from '../../types/CollectionData';
+export default function shareDatabaseReference(collections, reference) {
+    const newEntries = Object.entries(collections).map((entry) => {
+        const [key, collection] = entry;
+        if (isReferenceHolder(collection)) {
+            const finalReference = reference !== null && reference !== void 0 ? reference : firebase.firestore();
+            const newCollection = collection.setReference(finalReference.collection(collection.id));
             return [key, newCollection];
         }
-        else {
-            return [key, collection];
-        }
+        return [key, collection];
     });
     return Object.fromEntries(newEntries);
 }
-exports["default"] = shareDatabaseReference;
 //# sourceMappingURL=index.js.map

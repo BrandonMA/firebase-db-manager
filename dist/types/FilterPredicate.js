@@ -1,3 +1,2 @@
-"use strict";
-exports.__esModule = true;
+export {};
 //# sourceMappingURL=FilterPredicate.js.map

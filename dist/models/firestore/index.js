@@ -1,12 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var app_1 = __importDefault(require("firebase/compat/app"));
-require("firebase/compat/firestore");
-function firestore() {
-    return app_1["default"].firestore();
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+export default function firestore() {
+    return firebase.firestore();
 }
-exports["default"] = firestore;
 //# sourceMappingURL=index.js.map

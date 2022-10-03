@@ -1,11 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var functions_1 = __importDefault(require("@react-native-firebase/functions"));
-function functions() {
-    return (0, functions_1["default"])();
+import nativeFunctions from '@react-native-firebase/functions';
+export default function functions() {
+    return nativeFunctions();
 }
-exports["default"] = functions;
 //# sourceMappingURL=index.native.js.map

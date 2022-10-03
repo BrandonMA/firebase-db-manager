@@ -3,7 +3,7 @@ import 'firebase/compat/firestore';
 import { CollectionReference, DocumentReference } from '../../types';
 import { isReferenceHolder } from '../../types/CollectionData';
 
-export default function shareDatabaseReference<Collections>(
+export default function shareDatabaseReference<Collections extends object>(
     collections: Collections,
     reference?: DocumentReference | firebase.firestore.Firestore
 ): Collections {
@@ -11,11 +11,10 @@ export default function shareDatabaseReference<Collections>(
         const [key, collection] = entry;
         if (isReferenceHolder(collection)) {
             const finalReference = reference ?? firebase.firestore();
-            const newCollection = collection.setReference((finalReference.collection(collection.id) as unknown) as CollectionReference);
+            const newCollection = collection.setReference(finalReference.collection(collection.id) as unknown as CollectionReference);
             return [key, newCollection];
-        } else {
-            return [key, collection];
         }
+        return [key, collection];
     });
-    return (Object.fromEntries(newEntries) as unknown) as Collections;
+    return Object.fromEntries(newEntries) as unknown as Collections;
 }

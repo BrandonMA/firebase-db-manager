@@ -1,7 +1,7 @@
 import produce, { Draft } from 'immer';
 import { assignPropertiesToObject } from './assignPropertiesToObject';
 
-export function produceFirebaseObject<T>(
+export function produceFirebaseObject<T extends object>(
     originalObject: T,
     dataToAssign: Partial<T>,
     assignNullable?: boolean,

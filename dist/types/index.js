@@ -1,27 +1,11 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-exports.__esModule = true;
-__exportStar(require("./CollectionReference"), exports);
-__exportStar(require("./DocumentReference"), exports);
-__exportStar(require("./FirebaseReference"), exports);
-__exportStar(require("./IDEnabled"), exports);
-__exportStar(require("./DocumentTypes"), exports);
-__exportStar(require("./FilterPredicate"), exports);
-__exportStar(require("./GeoPoint"), exports);
-__exportStar(require("./PaginationPredicate"), exports);
-__exportStar(require("./SortingPredicate"), exports);
-__exportStar(require("./Timestamp"), exports);
+export * from './CollectionReference';
+export * from './DocumentReference';
+export * from './FirebaseReference';
+export * from './IDEnabled';
+export * from './DocumentTypes';
+export * from './FilterPredicate';
+export * from './GeoPoint';
+export * from './PaginationPredicate';
+export * from './SortingPredicate';
+export * from './Timestamp';
 //# sourceMappingURL=index.js.map
