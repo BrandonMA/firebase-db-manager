@@ -1,3 +1,3 @@
 import { Timestamp } from './Timestamp';
-import 'firebase/firestore';
+import 'firebase/compat/firestore';
 export declare function createTimestamp(date?: Date): Timestamp;

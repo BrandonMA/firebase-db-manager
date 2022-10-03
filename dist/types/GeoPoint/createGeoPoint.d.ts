@@ -1,3 +1,3 @@
 import { GeoPoint } from './GeoPoint';
-import 'firebase/firestore';
+import 'firebase/compat/firestore';
 export declare function createGeoPoint(latitude: number, longitude: number): GeoPoint;
